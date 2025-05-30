@@ -18,7 +18,7 @@ const Popular = () => {
   };
   const handleNext = () => {
     if (bottom === 10) {
-      setPage(page + 1);
+      setPage(page);
       setBottom(0);
     } else setBottom(bottom + 10);
   };
