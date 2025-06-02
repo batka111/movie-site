@@ -6,39 +6,12 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import Card from "@/components/HomeComponents/Card";
 import { useState } from "react";
+import Page from "../movies/page";
 
 const token =
   "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkNjdkOGJlYmQwZjRmZjM0NWY2NTA1Yzk5ZTlkMDI4OSIsIm5iZiI6MTc0MjE3NTA4OS4zODksInN1YiI6IjY3ZDc3YjcxODVkMTM5MjFiNTAxNDE1ZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.KxFMnZppBdHUSz_zB4p9A_gRD16I_R6OX1oiEe0LbE8";
 
-type Movie = {
-  title: string;
-  bottom: number;
-  route: string;
-  page?: number;
-};
-type Movie2 = {
-  id: number;
-  title: string;
-  vote_average: number;
-  overview: string;
-  poster_path: string;
-};
-
-type MovieResponse = {
-  results: Movie2[];
-};
-
 export default function Details() {
-  const [datMovies, setDatMovies] = useState<Movie>();
-
-  const url = `https://api.themoviedb.org/3/movie /similar?language=en-US&page=`;
-
-  const fetchMovies = () => {
-    fetch(url, { headers: { Authorization: `Bearer ${token}` } })
-      .then((response) => response.json())
-      .then((data) => datMovies(data));
-  };
-
   return (
     <div className="items-center flex gap-8 flex-col">
       <Navigation />
@@ -133,6 +106,7 @@ export default function Details() {
           }
         })}
       </div> */}
+      <Page />
 
       <Footer />
     </div>

@@ -14,8 +14,8 @@ export default async function Page({
 
   const data = await response.json();
   return (
-    <div>
-      <h2>{data.userId}</h2>
+    <div className="w-[250px] h-[250px] flex justify-center items-center">
+      <h2>{data.overview}</h2>
       <h2>{data.title}</h2>
     </div>
   );
