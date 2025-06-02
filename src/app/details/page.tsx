@@ -7,6 +7,9 @@ import { Separator } from "@/components/ui/separator";
 import Card from "@/components/HomeComponents/Card";
 import { useState } from "react";
 
+const token =
+  "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkNjdkOGJlYmQwZjRmZjM0NWY2NTA1Yzk5ZTlkMDI4OSIsIm5iZiI6MTc0MjE3NTA4OS4zODksInN1YiI6IjY3ZDc3YjcxODVkMTM5MjFiNTAxNDE1ZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.KxFMnZppBdHUSz_zB4p9A_gRD16I_R6OX1oiEe0LbE8";
+
 type Movie = {
   title: string;
   bottom: number;
@@ -27,12 +30,9 @@ type MovieResponse = {
 
 export default function Details() {
   const [datMovies, setDatMovies] = useState<Movie>();
-  const [movies, setMovies] = useState<MovieResponse>({ results: [] });
 
-  const url = `https://api.themoviedb.org/3/movie/similar?language=en-US&page=`;
+  const url = `https://api.themoviedb.org/3/movie /similar?language=en-US&page=`;
 
-  const token =
-    "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkNjdkOGJlYmQwZjRmZjM0NWY2NTA1Yzk5ZTlkMDI4OSIsIm5iZiI6MTc0MjE3NTA4OS4zODksInN1YiI6IjY3ZDc3YjcxODVkMTM5MjFiNTAxNDE1ZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.KxFMnZppBdHUSz_zB4p9A_gRD16I_R6OX1oiEe0LbE8";
   const fetchMovies = () => {
     fetch(url, { headers: { Authorization: `Bearer ${token}` } })
       .then((response) => response.json())
@@ -119,7 +119,7 @@ export default function Details() {
           <Separator />
         </div>
       </div>
-      <div>
+      {/* <div>
         {datMovies?.results?.slice(bottom, bottom + 10).map((movie) => {
           {
             return (
@@ -132,7 +132,7 @@ export default function Details() {
             );
           }
         })}
-      </div>
+      </div> */}
 
       <Footer />
     </div>
