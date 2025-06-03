@@ -33,6 +33,7 @@ const Popular = () => {
             bottom={bottom}
             route="popular"
             page={page}
+            id={0}
           ></MovieSection>
         </section>
         <div className="flex justify-end px-5 container gap-2">

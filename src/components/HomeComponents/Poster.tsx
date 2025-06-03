@@ -10,7 +10,9 @@ type Movie = {
 type MovieResponse = {
   results: Movie[];
 };
+import Link from "next/link";
 import { useEffect, useState } from "react";
+
 const url =
   "https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1";
 const token =
@@ -65,10 +67,12 @@ const Poster = () => {
               <div className="w-[402px] text-white text-[16px]">
                 <p>{movie.overview}</p>
               </div>
-              <button className="bg-white py-2 px-4 rounded-md w-fit flex items-center cursor-pointer gap-0.5">
-                <img src="./images/play.png" alt="" />
-                <p>Watch Trailer</p>
-              </button>
+              <Link href={"/"}>
+                <button className="bg-white py-2 px-4 rounded-md w-fit flex items-center cursor-pointer gap-0.5">
+                  <img src="./images/play.png" alt="" />
+                  <p>Watch Trailer</p>
+                </button>
+              </Link>
             </div>
           </div>
         );

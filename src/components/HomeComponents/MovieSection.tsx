@@ -9,6 +9,7 @@ type Movie1 = {
   bottom: number;
   route: string;
   page?: number;
+  id: number;
 };
 type Movie2 = {
   id: number;
@@ -59,6 +60,7 @@ const MovieSection = ({ title, bottom, route, page }: Movie1) => {
                 title={movie.title}
                 voteAverage={movie.vote_average}
                 imageUrl={movie.poster_path}
+                id={movie.id}
               />
             );
           }

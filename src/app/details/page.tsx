@@ -1,114 +1,77 @@
 "use client";
 
-import Navigation from "@/components/HomeComponents/Navigation";
-import Footer from "@/components/HomeComponents/Footer";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import Card from "@/components/HomeComponents/Card";
-import { useState } from "react";
-import Page from "../movies/page";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
+import { useState, useEffect } from "react";
 
 const token =
   "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkNjdkOGJlYmQwZjRmZjM0NWY2NTA1Yzk5ZTlkMDI4OSIsIm5iZiI6MTc0MjE3NTA4OS4zODksInN1YiI6IjY3ZDc3YjcxODVkMTM5MjFiNTAxNDE1ZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.KxFMnZppBdHUSz_zB4p9A_gRD16I_R6OX1oiEe0LbE8";
 
-export default function Details() {
-  return (
-    <div className="items-center flex gap-8 flex-col">
-      <Navigation />
-      <div className="flex flex-col gap-6">
-        <div className="flex justify-between text-[#09090B] h-[72px] pr-3">
-          <div className="flex flex-col gap-1">
-            <h2 className="text-4xl font-bold">Wicked</h2>
-            <p className="text-[18px] leading-7 font-normal">
-              2024.11.26 · PG · 2h 40m
-            </p>
-          </div>
-          <div className="flex flex-col items-start">
-            <p className="text-xs font-medium">Rating</p>
-            <div className="flex h-12 items-center gap-1 self-stretch">
-              <div>
-                <img src="/images/star.png" alt="" className="w-7 h-7" />
-              </div>
-              <div>
-                <p>
-                  <span className="text-[18px] text-[#09090B] font-semibold">
-                    6.9
-                  </span>
-                  <span className="text-[16px] text-[#71717A]">/10</span>
-                </p>
-                <p className="text-xs">37k</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="flex justify-center gap-8">
-          <img
-            src="/images/MoviePoster.png"
-            alt=""
-            className=" w-[290px] h-[428px]"
-          />
-          <img src="/images/wick.png" alt="" className="w-[760px] h-[428px]" />
-        </div>
-      </div>
-      <div className="flex flex-col w-[1080px] items-start gap-5">
-        <div className="flex gap-2.5">
-          <Badge className="bg-white text-black rounded-full border border-solid border-[#E4E4E7] px-2.5 py-0.5">
-            Fairy tale
-          </Badge>
-          <Badge className="bg-white text-black rounded-full border border-solid border-[#E4E4E7] px-2.5 py-0.5">
-            Fairy tale
-          </Badge>
-          <Badge className="bg-white text-black rounded-full border border-solid border-[#E4E4E7] px-2.5 py-0.5">
-            Fairy tale
-          </Badge>
-          <Badge className="bg-white text-black rounded-full border border-solid border-[#E4E4E7] px-2.5 py-0.5">
-            Fairy tale
-          </Badge>
-          <Badge className="bg-white text-black rounded-full border border-solid border-[#E4E4E7] px-2.5 py-0.5">
-            Fairy tale
-          </Badge>
-        </div>
-        <p className="text-[16px] leading-6">
-          Elphaba, a misunderstood young woman because of her green skin, and
-          Glinda, a popular girl, become friends at Shiz University in the Land
-          of Oz. After an encounter with the Wonderful Wizard of Oz, their
-          friendship reaches a crossroads.
-        </p>
-        <div className="flex gap-1 flex-col">
-          <div className="flex gap-[53px]">
-            <h2 className="font-bold text-[16px]">Director</h2>
-            <p>Jon M. Chu</p>
-          </div>
-          <Separator />
-          <div className="flex gap-[53px]">
-            <h2 className="font-bold text-[16px] w-16">Writer</h2>
-            <p>Winnie Holzman · Dana Fox · Gregory Maguire</p>
-          </div>
-          <Separator />
-          <div className="flex gap-[53px] w-[1080px]">
-            <h2 className="font-bold w-16 text-[16px]">Stars</h2>
-            <p>Cynthia Erivo · Ariana Grande · Jeff Goldblum</p>
-          </div>
-          <Separator />
-        </div>
-      </div>
-      {/* <div>
-        {datMovies?.results?.slice(bottom, bottom + 10).map((movie) => {
-          {
-            return (
-              <Card
-                key={movie.id}
-                title={movie.title}
-                voteAverage={movie.vote_average}
-                imageUrl={movie.poster_path}
-              />
-            );
-          }
-        })}
-      </div> */}
-      <Page />
+const Details = () => {
+  const [data, setData] = useState([]);
 
-      <Footer />
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(
+        "https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1"
+      );
+
+      const data = await response.json();
+      setData(data);
+      console.log(data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  return (
+    <div className="flex flex-col gap-8">
+      <div className="flex justify-between">
+        <h1 className="text-[24px] font-semibold">More like this</h1>
+        <div className="flex">
+          <p>See more</p>
+          <ArrowRight />
+        </div>
+      </div>
+      <div className=" grid sm:grid-cols-3 grid-cols-2 xl:grid-cols-5 md:grid-cols-4 auto-rows-auto gap-8 ">
+        {data &&
+          data?.results?.slice(5, 10).map((data) => {
+            return (
+              <Link href={`movies/${data.id}`} key={data?.id}>
+                <div>
+                  <div className="h-fit  rounded-md w-[190px]">
+                    <img
+                      src={`https://image.tmdb.org/t/p/w300${data?.poster_path}`}
+                      alt="poster"
+                      className=" rounded-t-md"
+                    />
+                    <div className=" px-3 py-2 gap-1 flex flex-col bg-gray-100 h-[96px]  rounded-md">
+                      <div className="flex items-center gap-1">
+                        <img
+                          src="/images/star.png"
+                          alt="star"
+                          className="size-4"
+                        />
+                        <div className="flex items-center">
+                          <p>{data.vote_average}</p>
+                          <p className=" leading-[16px]  text-[12px] text-[#71717A]">
+                            /10
+                          </p>
+                        </div>
+                      </div>
+                      <p>{data.title}</p>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
+      </div>
     </div>
   );
-}
+};
+
+export default Details;
