@@ -3,6 +3,13 @@ import Footer from "@/components/HomeComponents/Footer";
 import Navigation from "@/components/HomeComponents/Navigation";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@radix-ui/react-dropdown-menu";
+import {
+  Key,
+  ReactElement,
+  JSXElementConstructor,
+  ReactNode,
+  ReactPortal,
+} from "react";
 
 const token =
   "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkNjdkOGJlYmQwZjRmZjM0NWY2NTA1Yzk5ZTlkMDI4OSIsIm5iZiI6MTc0MjE3NTA4OS4zODksInN1YiI6IjY3ZDc3YjcxODVkMTM5MjFiNTAxNDE1ZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.KxFMnZppBdHUSz_zB4p9A_gRD16I_R6OX1oiEe0LbE8";
@@ -19,16 +26,8 @@ export default async function Page({
     `https://api.themoviedb.org/3/movie/${movieId}?language=en-US`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
-
   const data = await response.json();
   console.log(data);
-
-  const responser = await fetch(
-    `https://api.themoviedb.org/3/movie/${movieId}/credits?language=en-US`,
-    { headers: { Authorization: `Bearer ${token}` } }
-  );
-  const datas = await responser.json();
-  console.log(datas);
 
   return (
     <div className="items-center flex gap-8 flex-col">
@@ -75,43 +74,65 @@ export default async function Page({
       </div>
       <div className="flex flex-col w-[1080px] items-start gap-5">
         <div className="flex gap-2.5">
-          {data?.genres?.map((genre) => {
-            return (
-              <Badge
-                className="bg-white text-black rounded-full border border-solid border-[#E4E4E7] px-2.5 py-0.5"
-                key={genre.id}
-              >
-                {genre.name}
-              </Badge>
-            );
-          })}
+          {data?.genres?.map(
+            (genre: {
+              id: Key | null | undefined;
+              name:
+                | string
+                | number
+                | bigint
+                | boolean
+                | ReactElement<unknown, string | JSXElementConstructor<any>>
+                | Iterable<ReactNode>
+                | ReactPortal
+                | Promise<
+                    | string
+                    | number
+                    | bigint
+                    | boolean
+                    | ReactPortal
+                    | ReactElement<unknown, string | JSXElementConstructor<any>>
+                    | Iterable<ReactNode>
+                    | null
+                    | undefined
+                  >
+                | null
+                | undefined;
+            }) => {
+              return (
+                <Badge
+                  className="bg-white text-black rounded-full border border-solid border-[#E4E4E7] px-2.5 py-0.5"
+                  key={genre.id}
+                >
+                  {genre.name}
+                </Badge>
+              );
+            }
+          )}
         </div>
         <p className="text-[16px] leading-6">{data.overview}</p>
-        <div className="flex gap-1 flex-col">
+        <div className="flex gap-1 flex-col w-[1080px]">
           <div className="flex gap-[53px]">
             <h2 className="font-bold text-[16px]">Director</h2>
-            {datas?.crew?.slice(0, 1)?.map((crewe) => {
+            {data?.crew?.slice(0, 1)?.map((crewe) => {
               return <p key={crewe.id}>{crewe.name}</p>;
             })}
           </div>
           <Separator />
           <div className="flex gap-[53px]">
             <h2 className="font-bold text-[16px] w-16">Writer</h2>
-            {datas.crew?.slice(0, 7).map((crews) => {
-              return <p key={crews.id}>{crews.name}</p>;
-            })}
           </div>
           <Separator />
-          <div className="flex gap-[53px] w-[1080px]">
+          <div className="flex gap-[53px]">
             <h2 className="font-bold w-16 text-[16px]">Stars</h2>
-            {datas?.cast?.slice(0, 3).map((caster) => {
-              return <p key={caster.id}>{caster.name}</p>;
+            {data?.cast?.slice(0, 1).map((cast) => {
+              return <p key={cast.id}>{cast.name}</p>;
             })}
           </div>
           <Separator />
         </div>
       </div>
-      <Details />
+      <Details id={data.id} />
 
       <Footer />
     </div>
