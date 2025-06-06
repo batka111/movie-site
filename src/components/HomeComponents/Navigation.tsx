@@ -5,6 +5,7 @@ import {
   ChevronRight,
   ChevronUp,
   Search,
+  ArrowRight,
 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "../ui/button";
@@ -20,6 +21,7 @@ import {
 import { useEffect, useState } from "react";
 
 const url = "https://api.themoviedb.org/3/genre/movie/list?language=en";
+// const genreUrl = `https://api.themoviedb.org/3/discover/movie?language=en&with_genres=${genreIds}&page=${page}`;
 const token =
   "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkNjdkOGJlYmQwZjRmZjM0NWY2NTA1Yzk5ZTlkMDI4OSIsIm5iZiI6MTc0MjE3NTA4OS4zODksInN1YiI6IjY3ZDc3YjcxODVkMTM5MjFiNTAxNDE1ZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.KxFMnZppBdHUSz_zB4p9A_gRD16I_R6OX1oiEe0LbE8";
 const Navigation = () => {
@@ -66,8 +68,8 @@ const Navigation = () => {
                     className="bg-white text-black hover:bg-amber-50 border border-[#E4E4E7] w-fit"
                     key={id}
                   >
-                    <ChevronRight />
                     {name}
+                    <ChevronRight />
                   </DropdownMenuItem>
                 );
               })}
@@ -75,13 +77,38 @@ const Navigation = () => {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <div className="flex items-center gap-2.5 border px-3 rounded-md border-[#E4E4E7]">
+        <div className="flex items-center gap-2.5 border px-3 rounded-md border-[#E4E4E7] relative">
           <Search color="gray" />
           <input
             type="text"
             placeholder="Search...."
             className=" focus:outline-0"
           />
+          <div className="absolute w-[577px] flex flex-col p-3 border border-solid top-[40px] z-10 left-[-200px] rounded-lg border-[#E4E4E7] bg-[#fff]">
+            <div className="flex gap-3 p-2">
+              <img
+                src="/images/wick.png"
+                alt=""
+                className="w-[67px] h-[100px] rounded-md"
+              />
+              <div className="flex flex-col gap-3">
+                <div className="flex flex-col">
+                  <h2>Wicked</h2>
+                  <p className="flex items-center">
+                    <img src="/images/star.png" alt="" className="w-4 h-4" />
+                    6.9 <span>/10</span>
+                  </p>
+                </div>
+                <div className="flex justify-between self-stretch items-start w-[454px]">
+                  <p>2024</p>
+                  <button className=" cursor-pointer flex items-center gap-2 px-4 py-2 ">
+                    <p>See more</p>
+                    <ArrowRight />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <button className="border cursor-pointer border-[#E4E4E7] h-9 w-9 rounded-md flex justify-center items-center">
@@ -92,7 +119,3 @@ const Navigation = () => {
 };
 
 export default Navigation;
-<DropdownMenuItem className="bg-white text-black hover:bg-amber-50 border border-[#E4E4E7] w-fit">
-  <ChevronRight />
-  Action
-</DropdownMenuItem>;
