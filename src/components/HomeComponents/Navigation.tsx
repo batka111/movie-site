@@ -1,4 +1,17 @@
 "use client";
+type Movie = {
+  title: string;
+  release_date: string;
+  adult: boolean;
+  runtime: string;
+  vote_average: number;
+  vote_count: number;
+  backdrop_path: string;
+  poster_path: string;
+  genres: { id: number; name: string }[];
+  overview: string;
+  production_companies: { id: number; name: string }[];
+};
 import {
   Moon,
   ChevronDown,
@@ -19,24 +32,36 @@ import {
   DropdownMenuGroup,
 } from "@/components/ui/dropdown-menu";
 import { useEffect, useState } from "react";
-
-const url = "https://api.themoviedb.org/3/genre/movie/list?language=en";
-// const genreUrl = `https://api.themoviedb.org/3/discover/movie?language=en&with_genres=${genreIds}&page=${page}`;
-const token =
-  "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkNjdkOGJlYmQwZjRmZjM0NWY2NTA1Yzk5ZTlkMDI4OSIsIm5iZiI6MTc0MjE3NTA4OS4zODksInN1YiI6IjY3ZDc3YjcxODVkMTM5MjFiNTAxNDE1ZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.KxFMnZppBdHUSz_zB4p9A_gRD16I_R6OX1oiEe0LbE8";
+import { ClipLoader } from "react-spinners";
 const Navigation = () => {
-  const [data, setData] = useState([]);
-
+  const [searchValue, setSearchValue] = useState("");
+  const searchUrl = `https://api.themoviedb.org/3/search/movie?query=${searchValue}&language=en-US&page=1`;
+  const genresUrl = "https://api.themoviedb.org/3/genre/movie/list?language=en";
+  const token =
+    "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkNjdkOGJlYmQwZjRmZjM0NWY2NTA1Yzk5ZTlkMDI4OSIsIm5iZiI6MTc0MjE3NTA4OS4zODksInN1YiI6IjY3ZDc3YjcxODVkMTM5MjFiNTAxNDE1ZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.KxFMnZppBdHUSz_zB4p9A_gRD16I_R6OX1oiEe0LbE8";
+  const [genresData, setGenresData] = useState([]);
+  const [searchData, setSearchData] = useState<Movie>([]);
   useEffect(() => {
     fetchGenreData();
-  }, []);
+    fetchSearchData();
+  }, [searchValue]);
 
   const fetchGenreData = () => {
-    fetch(url, { headers: { Authorization: `Bearer ${token}` } })
+    fetch(genresUrl, { headers: { Authorization: `Bearer ${token}` } })
       .then((response) => response.json())
-      .then((data) => setData(data.genres));
+      .then((data) => setGenresData(data.genres));
+  };
+  const fetchSearchData = () => {
+    fetch(searchUrl, { headers: { Authorization: `Bearer ${token}` } })
+      .then((res) => res.json())
+      .then((data) => setSearchData(data));
   };
 
+  const isResultThere = () => {
+    if (searchValue && searchData.results.length === 0) {
+      return true;
+    } else false;
+  };
   return (
     <div className="h-[60px] flex justify-between items-center container px-5">
       <Link href={"/"}>
@@ -62,14 +87,14 @@ const Navigation = () => {
             </DropdownMenuLabel>
             <DropdownMenuSeparator className="my-4" />
             <DropdownMenuGroup className="flex gap-4 flex-wrap w-full">
-              {data?.map(({ id, name }) => {
+              {genresData?.map(({ id, name }) => {
                 return (
                   <DropdownMenuItem
                     className="bg-white text-black hover:bg-amber-50 border border-[#E4E4E7] w-fit"
                     key={id}
                   >
-                    {name}
                     <ChevronRight />
+                    {name}
                   </DropdownMenuItem>
                 );
               })}
@@ -83,32 +108,59 @@ const Navigation = () => {
             type="text"
             placeholder="Search...."
             className=" focus:outline-0"
+            value={searchValue}
+            onChange={(e) => {
+              setSearchValue(e.target.value);
+            }}
           />
-          <div className="absolute w-[577px] flex flex-col p-3 border border-solid top-[40px] z-10 left-[-200px] rounded-lg border-[#E4E4E7] bg-[#fff]">
-            <div className="flex gap-3 p-2">
-              <img
-                src="/images/wick.png"
-                alt=""
-                className="w-[67px] h-[100px] rounded-md"
-              />
-              <div className="flex flex-col gap-3">
-                <div className="flex flex-col">
-                  <h2>Wicked</h2>
-                  <p className="flex items-center">
-                    <img src="/images/star.png" alt="" className="w-4 h-4" />
-                    6.9 <span>/10</span>
-                  </p>
+          {searchValue && (
+            <div className="absolute top-10 w-[577px] left-[-200px] h-fit border p-3 flex flex-col z-10 bg-white">
+              {searchData &&
+                searchData?.results?.slice(0, 5).map((movie) => {
+                  return (
+                    <div className="p-2 flex gap-4 w-full" key={movie.id}>
+                      <img
+                        src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
+                        alt=""
+                        className="h-full w-[67px] border "
+                      />
+                      <div className="flex flex-col gap-3 w-full">
+                        <div>
+                          <p className="font-semibold text-xl">{movie.title}</p>
+                          <div className="flex gap-1 items-center">
+                            <img
+                              src="/images/star.png"
+                              alt="star"
+                              className="size-4"
+                            />
+                            <p className="text-[#09090B]">
+                              {Math.floor(movie.vote_average / 0.1) / 10}
+                              <span className="text-[#71717A] text-[12px]">
+                                /10
+                              </span>
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex justify-between w-full  items-center">
+                          <p className="h-full">{movie.release_date}</p>
+                          <Link href={`/movies/${movie.id}`}>
+                            <button className="flex gap-2 cursor-pointer px-4 py-2 rounded-sm">
+                              <p>See more</p>
+                              <ArrowRight></ArrowRight>
+                            </button>
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              {isResultThere() && (
+                <div className="flex h-[128px] items-center justify-center">
+                  No results found.
                 </div>
-                <div className="flex justify-between self-stretch items-start w-[454px]">
-                  <p>2024</p>
-                  <button className=" cursor-pointer flex items-center gap-2 px-4 py-2 ">
-                    <p>See more</p>
-                    <ArrowRight />
-                  </button>
-                </div>
-              </div>
+              )}
             </div>
-          </div>
+          )}
         </div>
       </div>
       <button className="border cursor-pointer border-[#E4E4E7] h-9 w-9 rounded-md flex justify-center items-center">

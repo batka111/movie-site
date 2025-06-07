@@ -18,7 +18,7 @@ const Upcoming = () => {
   };
   const handleNext = () => {
     if (bottom === 10) {
-      setPage(page);
+      setPage(page + 1);
       setBottom(0);
     } else setBottom(bottom + 10);
   };

@@ -4,7 +4,7 @@ const Footer = () => {
       <div className="container  text-[#FAFAFA] flex justify-between">
         <div className="flex flex-col gap-x-36">
           <div className="flex gap-2 items-center">
-            <img src="/images/fillm.png" alt="" className="w-5 h-5" />
+            <img src="/images/filmWhite.png" alt="" className="w-5 h-5" />
             <p className=" italic text-[16px] font-bold">Movie Z</p>
           </div>
           <p>© 2024 Movie Z. All Rights Reserved.</p>
@@ -14,14 +14,14 @@ const Footer = () => {
             <p>Contact Information</p>
             <div className="flex flex-col gap-6">
               <div className="flex items-center gap-3">
-                <img src="/images/mail.png" alt="" className="w-4 h-4" />
+                <img src="/images/email.png" alt="" className="w-4 h-4" />
                 <div>
                   <p>Email:</p>
                   <p>support@movieZ.com</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <img src="/images/phone.png" alt="" className="w-4 h-4" />
+                <img src="/images/phone.png" alt="" />
                 <div>
                   <p>Phone:</p>
                   <p>+976 (11) 123-4567</p>

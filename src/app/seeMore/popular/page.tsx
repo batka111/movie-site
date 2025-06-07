@@ -18,7 +18,7 @@ const Popular = () => {
   };
   const handleNext = () => {
     if (bottom === 10) {
-      setPage(page);
+      setPage(page + 1);
       setBottom(0);
     } else setBottom(bottom + 10);
   };
@@ -33,7 +33,6 @@ const Popular = () => {
             bottom={bottom}
             route="popular"
             page={page}
-            id={0}
           ></MovieSection>
         </section>
         <div className="flex justify-end px-5 container gap-2">

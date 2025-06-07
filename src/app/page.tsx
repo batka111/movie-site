@@ -12,7 +12,7 @@ const Home = () => {
     <div className="flex flex-col items-center">
       <Navigation></Navigation>
 
-      <Poster id={undefined}></Poster>
+      <Poster></Poster>
 
       <section className="flex flex-col gap-13 mt-8 ">
         {data.map((section) => {
@@ -23,7 +23,6 @@ const Home = () => {
               bottom={section.bottom}
               route={section.route}
               page={1}
-              id={0}
             ></MovieSection>
           );
         })}
