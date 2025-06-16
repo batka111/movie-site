@@ -1,27 +1,15 @@
 "use client";
-type Movie = {
-  title: string;
-  release_date: string;
-  adult: boolean;
-  runtime: string;
-  vote_average: number;
-  vote_count: number;
-  backdrop_path: string;
-  poster_path: string;
-  genres: { id: number; name: string }[];
-  overview: string;
-  production_companies: { id: number; name: string }[];
-};
+
 import {
   Moon,
   ChevronDown,
   ChevronRight,
-  ChevronUp,
   Search,
   ArrowRight,
 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "../ui/button";
+import { navigationUrl, token } from "@/constants/page";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,18 +21,19 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useEffect, useState } from "react";
 import { ClipLoader } from "react-spinners";
+import { MovieResponse } from "@/type";
 const Navigation = () => {
   const [searchValue, setSearchValue] = useState("");
-  const searchUrl = `https://api.themoviedb.org/3/search/movie?query=${searchValue}&language=en-US&page=1`;
-  const genresUrl = "https://api.themoviedb.org/3/genre/movie/list?language=en";
-  const token =
-    "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkNjdkOGJlYmQwZjRmZjM0NWY2NTA1Yzk5ZTlkMDI4OSIsIm5iZiI6MTc0MjE3NTA4OS4zODksInN1YiI6IjY3ZDc3YjcxODVkMTM5MjFiNTAxNDE1ZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.KxFMnZppBdHUSz_zB4p9A_gRD16I_R6OX1oiEe0LbE8";
+  const { searchUrl, genresUrl } = navigationUrl(searchValue);
+
   const [genresData, setGenresData] = useState([]);
-  const [searchData, setSearchData] = useState<Movie>([]);
+  const [searchData, setSearchData] = useState<MovieResponse>({ results: [] });
   useEffect(() => {
-    fetchGenreData();
     fetchSearchData();
   }, [searchValue]);
+  useEffect(() => {
+    fetchGenreData();
+  }, []);
 
   const fetchGenreData = () => {
     fetch(genresUrl, { headers: { Authorization: `Bearer ${token}` } })
@@ -60,7 +49,7 @@ const Navigation = () => {
   const isResultThere = () => {
     if (searchValue && searchData.results.length === 0) {
       return true;
-    } else false;
+    } else return false;
   };
   return (
     <div className="h-[60px] flex justify-between items-center container px-5">
@@ -89,13 +78,15 @@ const Navigation = () => {
             <DropdownMenuGroup className="flex gap-4 flex-wrap w-full">
               {genresData?.map(({ id, name }) => {
                 return (
-                  <DropdownMenuItem
-                    className="bg-white text-black hover:bg-amber-50 border border-[#E4E4E7] w-fit"
-                    key={id}
-                  >
-                    <ChevronRight />
-                    {name}
-                  </DropdownMenuItem>
+                  <Link href={`/genres/${id}`} key={id}>
+                    <DropdownMenuItem
+                      className="bg-white cursor-pointer text-black hover:bg-amber-50 border border-[#E4E4E7] w-fit rounded-full font-semibold"
+                      key={id}
+                    >
+                      {name}
+                      <ChevronRight />
+                    </DropdownMenuItem>
+                  </Link>
                 );
               })}
             </DropdownMenuGroup>
@@ -118,7 +109,10 @@ const Navigation = () => {
               {searchData &&
                 searchData?.results?.slice(0, 5).map((movie) => {
                   return (
-                    <div className="p-2 flex gap-4 w-full" key={movie.id}>
+                    <div
+                      className="p-2 flex gap-4 w-full hover:bg-[#e3e2e2]"
+                      key={movie.id}
+                    >
                       <img
                         src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
                         alt=""
@@ -155,8 +149,8 @@ const Navigation = () => {
                   );
                 })}
               {isResultThere() && (
-                <div className="flex h-[128px] items-center justify-center">
-                  No results found.
+                <div className="flex justify-center">
+                  <ClipLoader></ClipLoader>
                 </div>
               )}
             </div>

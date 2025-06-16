@@ -10,7 +10,7 @@ const data = [
 const Home = () => {
   return (
     <div className="flex flex-col items-center">
-      <Navigation></Navigation>
+      <Navigation />
 
       <Poster></Poster>
 
@@ -23,6 +23,7 @@ const Home = () => {
               bottom={section.bottom}
               route={section.route}
               page={1}
+              isSeeMoreActive
             ></MovieSection>
           );
         })}
