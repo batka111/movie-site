@@ -8,7 +8,7 @@ import { useState } from "react";
 import { useParams } from "next/navigation";
 import Pagination from "@/components/HomeComponents/Pagination";
 import { SimiliarMovie } from "@/type";
-import { similiarPageUrl, token } from "@/constants";
+import { similiarPageUrl, token } from "@/constants/page";
 const Similiar = () => {
   const params = useParams();
   const id = params.movieId;
